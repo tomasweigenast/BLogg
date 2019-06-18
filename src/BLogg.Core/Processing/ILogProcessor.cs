@@ -30,7 +30,7 @@ namespace BLogg.Core.Processing
     }
 
     /// <summary>
-    /// Interface used to create logging processors which implementsa custom configuration
+    /// Interface used to create logging processors which implements custom configuration
     /// </summary>
     public interface ILogProcessor<TProcessConfiguration> : ILogProcessor
         where TProcessConfiguration : IProcessorConfiguration
@@ -41,6 +41,28 @@ namespace BLogg.Core.Processing
         /// The configuration for this processor
         /// </summary>
         TProcessConfiguration Configuration { get; set; }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Interface used to create logging processors which implementsa custom configuration and an optional configuration
+    /// </summary>
+    public interface ILogProcessor<TProcessConfiguration, TProcessOptionalConfiguration> : ILogProcessor
+        where TProcessConfiguration : IProcessorConfiguration
+        where TProcessOptionalConfiguration : IProcessorConfiguration
+    {
+        #region Properties
+
+        /// <summary>
+        /// The configuration for this processor
+        /// </summary>
+        TProcessConfiguration Configuration { get; set; }
+
+        /// <summary>
+        /// The optional configuration for the processor
+        /// </summary>
+        TProcessOptionalConfiguration OptionalConfiguration { get; set; }
 
         #endregion
     }

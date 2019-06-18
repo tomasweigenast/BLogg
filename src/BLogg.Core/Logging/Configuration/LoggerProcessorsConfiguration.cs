@@ -1,7 +1,9 @@
-﻿using BLogg.Core.Processing;
+﻿using BLogg.Core.Exceptions;
+using BLogg.Core.Processing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace BLogg.Core.Logging.Configuration
 {
@@ -51,7 +53,7 @@ namespace BLogg.Core.Logging.Configuration
         }
 
         /// <summary>
-        /// Adds a new processor with custom configuration
+        /// Adds a new processor with custom required configuration
         /// </summary>
         /// <typeparam name="TProcessor">The type of the processor to add</typeparam>
         /// <typeparam name="TProcessorSettings">The settings of the processor</typeparam>
@@ -69,8 +71,48 @@ namespace BLogg.Core.Logging.Configuration
             if (mAddedProcessors == null) return false;
             if (mAddedProcessors.Contains(processorInstance)) return false;
 
+            // Check null properties
+            CheckNullProperties(processorSettingsInstance);
+
             // Apply configuration
             processorInstance.Configuration = processorSettingsInstance;
+
+            // Add processor
+            mAddedProcessors.Add(processorInstance);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Adds a new processor with custom required configuration and an optional one
+        /// </summary>
+        /// <typeparam name="TProcessor">The type of the processor to add</typeparam>
+        /// <typeparam name="TProcessorSettings">The settings type of the processor</typeparam>
+        /// <typeparam name="TProcessorOptionalSettings">The optional settings type of the processor</typeparam>
+        /// <param name="settings">The settings of the processor</param>
+        /// <param name="optionalSettings">The optional settings of the processor</param>
+        public bool AddNew<TProcessor, TProcessorSettings, TProcessorOptionalSettings>(Action<TProcessorSettings> settings, Action<TProcessorOptionalSettings> optionalSettings)
+            where TProcessorSettings : IProcessorConfiguration
+            where TProcessorOptionalSettings : IProcessorConfiguration
+            where TProcessor : ILogProcessor<TProcessorSettings, TProcessorOptionalSettings>
+        {
+            // Create instances
+            TProcessor processorInstance = Activator.CreateInstance<TProcessor>(); // Processor instance
+            TProcessorSettings processorSettingsInstance = Activator.CreateInstance<TProcessorSettings>(); // Processor settings instance
+            TProcessorOptionalSettings processorOptionalSettingsInstance = Activator.CreateInstance<TProcessorOptionalSettings>(); // The optional settings
+            settings.Invoke(processorSettingsInstance); // Invoke settings
+            optionalSettings.Invoke(processorOptionalSettingsInstance); // Invoke optional settings
+
+            // Return false if something fails
+            if (mAddedProcessors == null) return false;
+            if (mAddedProcessors.Contains(processorInstance)) return false;
+
+            // Check null properties of the required properties
+            CheckNullProperties(processorSettingsInstance);
+
+            // Apply configuration
+            processorInstance.Configuration = processorSettingsInstance;
+            processorInstance.OptionalConfiguration = processorOptionalSettingsInstance;
 
             // Add processor
             mAddedProcessors.Add(processorInstance);
@@ -122,6 +164,30 @@ namespace BLogg.Core.Logging.Configuration
             => mAddedProcessors.ToArray();
 
         #endregion
+
+        #endregion
+
+        #region Private Method Helpers
+
+        /// <summary>
+        /// Checks for each property of a type and if it founds a null property, it throws an exception
+        /// </summary>
+        public void CheckNullProperties(object instance)
+        {
+            // Get public properties
+            var properties = instance.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            // Foreach property
+            foreach(var property in properties)
+            {
+                // Try to get its value
+                object value = property.GetValue(instance);
+
+                // If the value if null, throw exception
+                if (value == null)
+                    throw new RequiredPropertyException(property.Name);
+            }
+        }
 
         #endregion
     }
