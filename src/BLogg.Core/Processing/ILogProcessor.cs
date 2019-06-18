@@ -1,5 +1,4 @@
 ﻿using BLogg.Core.Events;
-using BLogg.Core.Logging.Configuration;
 
 namespace BLogg.Core.Processing
 {

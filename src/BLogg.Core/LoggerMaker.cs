@@ -1,4 +1,6 @@
-﻿using BLogg.Core.Logging.Base;
+﻿using BLogg.Core.Events;
+using BLogg.Core.Logging;
+using BLogg.Core.Logging.Base;
 using BLogg.Core.Logging.Configuration;
 
 namespace BLogg.Core
@@ -9,6 +11,8 @@ namespace BLogg.Core
     public sealed class LoggerMaker
     {
         #region Private Members
+
+        private LogLevel mDefaultLogLevel = LogLevel.Info; // The default log level to use
 
         #endregion
 
@@ -24,7 +28,7 @@ namespace BLogg.Core
         /// </summary>
         internal LoggerMaker()
         {
-            Processors = new LoggerProcessorsConfiguration(this);
+            WithProcessor = new LoggerProcessorsConfiguration(this);
         }
 
         #endregion
@@ -34,17 +38,42 @@ namespace BLogg.Core
         /// <summary>
         /// Provides methods to implement new logger processors
         /// </summary>
-        public LoggerProcessorsConfiguration Processors { get; }
+        public LoggerProcessorsConfiguration WithProcessor { get; }
 
         #endregion
 
         #region Methods
 
+        #region Static
+
         /// <summary>
         /// Creates a new logger
         /// </summary>
-        public static LoggerMaker MakeNew()
-            => new LoggerMaker();
+        public static LoggerMaker MakeNew() => new LoggerMaker();
+
+        #endregion
+
+        /// <summary>
+        /// Specifies the logger to use a default log level when the logging function is called.
+        /// If this is not set, the default log level is Info
+        /// </summary>
+        /// <param name="logLevel">The default log level to set</param>
+        public LoggerMaker WithDefaultLogLevel(LogLevel logLevel)
+        {
+            mDefaultLogLevel = logLevel;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Builds a logger with the custom settings
+        /// </summary>
+        public Logger Build()
+        {
+            Logger logger = new Logger(WithProcessor.GetProcessors(), mDefaultLogLevel);
+
+            return logger;
+        }
 
         #endregion
     }

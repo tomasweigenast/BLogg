@@ -66,25 +66,25 @@ namespace BLogg.Core.Processing.BuiltIn
         /// <summary>
         /// Adds a new instance of the <see cref="ConsoleProcessor"/> to the processors
         /// </summary>
-        public static LoggerProcessorsConfiguration AddConsole(this LoggerProcessorsConfiguration configuration)
+        public static LoggerMaker Console(this LoggerProcessorsConfiguration configuration)
         {
             // Add the processor
             configuration.AddNew<ConsoleProcessor>();
 
             // Return the configuration
-            return configuration;
+            return configuration.Maker;
         }
 
         /// <summary>
         /// Adds a new instance of the <see cref="ConsoleProcessor"/> to the processors
         /// </summary>
-        public static LoggerProcessorsConfiguration AddConsole(this LoggerProcessorsConfiguration configuration, Action<ConsoleProcessorSettings> settings)
+        public static LoggerMaker Console(this LoggerProcessorsConfiguration configuration, Action<ConsoleProcessorSettings> settings)
         {
             // Add the processor
             configuration.AddNew<ConsoleProcessor, ConsoleProcessorSettings>(settings);
 
             // Return the configuration
-            return configuration;
+            return configuration.Maker;
         }
     }
 }

@@ -65,13 +65,16 @@ namespace BLogg.Core.Processing.BuiltIn
         /// <summary>
         /// Adds a new instance of the <see cref="ConsoleProcessor"/> to the processors
         /// </summary>
-        public static LoggerProcessorsConfiguration AddFile(this LoggerProcessorsConfiguration configuration, Action<FileProcessorSettings> settings)
+        public static LoggerMaker File(this LoggerProcessorsConfiguration configuration, Action<FileProcessorSettings> settings)
         {
             // Add the processor
-            configuration.AddNew<FileProcessor, FileProcessorSettings>(settings);
+            bool success = configuration.AddNew<FileProcessor, FileProcessorSettings>(settings);
+
+            if (!success)
+                throw new Exception("Processor duplicated.");
 
             // Return the configuration
-            return configuration;
+            return configuration.Maker;
         }
     }
 }

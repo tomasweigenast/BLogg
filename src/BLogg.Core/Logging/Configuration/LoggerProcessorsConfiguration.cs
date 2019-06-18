@@ -19,6 +19,15 @@ namespace BLogg.Core.Logging.Configuration
 
         #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// The current logger maker instance
+        /// </summary>
+        public LoggerMaker Maker => mMaker;
+
+        #endregion
+
         #region Constructors
 
         internal LoggerProcessorsConfiguration(LoggerMaker maker)
@@ -69,7 +78,7 @@ namespace BLogg.Core.Logging.Configuration
 
             // Return false if something fails
             if (mAddedProcessors == null) return false;
-            if (mAddedProcessors.Contains(processorInstance)) return false;
+            if (mAddedProcessors.Any(x => x.GetType() == typeof(TProcessor))) return false;
 
             // Check null properties
             CheckNullProperties(processorSettingsInstance);
@@ -105,7 +114,7 @@ namespace BLogg.Core.Logging.Configuration
 
             // Return false if something fails
             if (mAddedProcessors == null) return false;
-            if (mAddedProcessors.Contains(processorInstance)) return false;
+            if (mAddedProcessors.Any(x => x.GetType() == typeof(TProcessor))) return false;
 
             // Check null properties of the required properties
             CheckNullProperties(processorSettingsInstance);

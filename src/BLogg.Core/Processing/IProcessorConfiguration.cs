@@ -1,4 +1,4 @@
-﻿namespace BLogg.Core.Logging.Configuration
+﻿namespace BLogg.Core.Processing
 {
     public interface IProcessorConfiguration
     {
