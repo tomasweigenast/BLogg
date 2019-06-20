@@ -1,5 +1,6 @@
 ﻿using BLogg.Core.Attributes;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 
 namespace BLogg.Core.Diagnostics
@@ -61,10 +62,10 @@ namespace BLogg.Core.Diagnostics
 
             // Get stackframe properties
             var methodBase = stackFrame == null ? MethodBase.GetCurrentMethod() : stackFrame.GetMethod();
-            CallingMethod = methodBase.Name;
+            CallingMethod = $"{methodBase.Name}()";
             CallingClass = methodBase.ReflectedType.Name;
             LineNumber = stackFrame.GetFileLineNumber();
-            FileName = stackFrame.GetFileName();
+            FileName = Path.GetFileName(stackFrame.GetFileName());
         }
 
         #endregion

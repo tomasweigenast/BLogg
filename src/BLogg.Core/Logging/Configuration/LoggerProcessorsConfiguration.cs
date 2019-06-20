@@ -1,4 +1,5 @@
-﻿using BLogg.Core.Exceptions;
+﻿using BLogg.Core.Attributes;
+using BLogg.Core.Exceptions;
 using BLogg.Core.Processing;
 using System;
 using System.Collections.Generic;
@@ -81,7 +82,8 @@ namespace BLogg.Core.Logging.Configuration
             if (mAddedProcessors.Any(x => x.GetType() == typeof(TProcessor))) return false;
 
             // Check null properties
-            CheckNullProperties(processorSettingsInstance);
+            if (processorSettingsInstance.GetType().GetCustomAttributes().Any(x => x.GetType() == typeof(RequiredPropertyAttribute)))
+                CheckNullProperties(processorSettingsInstance);
 
             // Apply configuration
             processorInstance.Configuration = processorSettingsInstance;

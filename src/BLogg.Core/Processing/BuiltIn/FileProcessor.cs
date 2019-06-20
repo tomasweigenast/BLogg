@@ -1,4 +1,5 @@
-﻿using BLogg.Core.Events;
+﻿using BLogg.Core.Attributes;
+using BLogg.Core.Events;
 using BLogg.Core.Logging.Configuration;
 using System;
 
@@ -35,7 +36,7 @@ namespace BLogg.Core.Processing.BuiltIn
 
         public void OnRevoke()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void Process(LogEvent logEvent)
@@ -54,6 +55,7 @@ namespace BLogg.Core.Processing.BuiltIn
         /// <summary>
         /// The folder path where the logs files will be saved
         /// </summary>
+        [RequiredProperty]
         public string Path { get; set; }
     }
 

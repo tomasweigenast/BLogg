@@ -1,4 +1,7 @@
-﻿using BLogg.Core.Events;
+﻿using BLogg.Core.Attributes;
+using BLogg.Core.Events;
+using BLogg.Core.Formatters;
+using BLogg.Core.Formatters.Event;
 using BLogg.Core.Logging.Configuration;
 using System;
 using System.IO;
@@ -36,12 +39,34 @@ namespace BLogg.Core.Processing.BuiltIn
 
         public void OnRevoke()
         {
-            throw new System.NotImplementedException();
+            
         }
 
+        /// <summary>
+        /// Process the log event
+        /// </summary>
         public void Process(LogEvent logEvent)
         {
-            throw new System.NotImplementedException();
+            // If a unique level was provided, check if the event contains it
+            if(Configuration?.Level != null)
+                if (logEvent.Level != Configuration?.Level.Value) return; // Skip it
+
+            // Get the text writer to use
+            TextWriter writerToUse;
+            IEventFormatter formatter;
+
+            // Get the writer to use
+            if (Configuration?.Writer == null) writerToUse = Console.Out;
+            else writerToUse = Configuration?.Writer;
+
+            // Detect a custom formatter
+            if (Configuration?.CustomOutputFormat != null && !string.IsNullOrWhiteSpace(Configuration?.CustomOutputFormat))
+                formatter = new PlaceholderLogFormatter(Configuration?.CustomOutputFormat); // Use the custom format
+            else
+                formatter = new DefaultLogFormatter(); // Use default log formatter
+
+            // Write the log
+            writerToUse.WriteLine(formatter.Format(logEvent));
         }
 
         #endregion
@@ -56,6 +81,16 @@ namespace BLogg.Core.Processing.BuiltIn
         /// A custom writer flush to write the log events to
         /// </summary>
         public TextWriter Writer { get; set; }
+
+        /// <summary>
+        /// The unique level to log to the console. If its null, all the levels will be logged
+        /// </summary>
+        public LogLevel? Level { get; set; } = null;
+
+        /// <summary>
+        /// A custom output format for the processor
+        /// </summary>
+        public string CustomOutputFormat { get; set; }
     }
 
     /// <summary>
