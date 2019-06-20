@@ -1,4 +1,6 @@
-﻿namespace BLogg.Core.Events
+﻿using System.Drawing;
+
+namespace BLogg.Core.Events
 {
     /// <summary>
     /// All the possible levels of an event
@@ -29,5 +31,39 @@
         /// Very severe error events that might cause the application to terminate
         /// </summary>
         Fatal = 50000
+    }
+
+    /// <summary>
+    /// Extension methods to work with <see cref="LogLevel"/>
+    /// </summary>
+    public static class LogLevelExtensions
+    {
+        /// <summary>
+        /// Gets the color of a log level
+        /// </summary>
+        /// <param name="logLevel">The log level to get its color</param>
+        public static Color GetColor(this LogLevel logLevel)
+        {
+            switch(logLevel)
+            {
+                case LogLevel.Debug:
+                    return Color.Magenta;
+
+                case LogLevel.Error:
+                    return Color.IndianRed;
+
+                case LogLevel.Fatal:
+                    return Color.Red;
+
+                case LogLevel.Warning:
+                    return Color.Orange;
+
+                case LogLevel.Info:
+                    return Color.Green;
+
+                default:
+                    return Color.Green;
+            }
+        }
     }
 }

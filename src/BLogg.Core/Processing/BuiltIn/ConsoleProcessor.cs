@@ -1,5 +1,4 @@
-﻿using BLogg.Core.Attributes;
-using BLogg.Core.Events;
+﻿using BLogg.Core.Events;
 using BLogg.Core.Formatters;
 using BLogg.Core.Formatters.Event;
 using BLogg.Core.Logging.Configuration;
@@ -63,7 +62,7 @@ namespace BLogg.Core.Processing.BuiltIn
             if (Configuration?.CustomOutputFormat != null && !string.IsNullOrWhiteSpace(Configuration?.CustomOutputFormat))
                 formatter = new PlaceholderLogFormatter(Configuration?.CustomOutputFormat); // Use the custom format
             else
-                formatter = new DefaultLogFormatter(); // Use default log formatter
+                formatter = new DefaultLogFormatter(Configuration == null ? false : Configuration.UseColors); // Use default log formatter
 
             // Write the log
             writerToUse.WriteLine(formatter.Format(logEvent));
@@ -91,6 +90,11 @@ namespace BLogg.Core.Processing.BuiltIn
         /// A custom output format for the processor
         /// </summary>
         public string CustomOutputFormat { get; set; }
+
+        /// <summary>
+        /// If true, the log will be written with colors
+        /// </summary>
+        public bool UseColors { get; set; }
     }
 
     /// <summary>

@@ -2,6 +2,7 @@
 using BLogg.Core.Events;
 using BLogg.Core.Processing.BuiltIn;
 using System;
+using System.IO;
 
 namespace BLogg.Tests.ConsoleApp
 {
@@ -13,6 +14,7 @@ namespace BLogg.Tests.ConsoleApp
                 .WithProcessor.Console(settings =>
                 {
                     //settings.Level = LogLevel.Debug;
+                    settings.UseColors = true;
                 })
                 .WithDefaultLogLevel(LogLevel.Debug)
                 .Build();
@@ -21,7 +23,9 @@ namespace BLogg.Tests.ConsoleApp
 
             logger.Log("Hello");
             logger.LogInformation("An information message with a property formatted: {!MyClass}", my);
-            logger.LogFatal("A fatal error", new Exception("Failed"));
+            logger.LogWarning("WARNING!");
+            logger.LogError("An simple error.");
+            logger.LogFatal("A fatal error", new FileNotFoundException("File not found.", "myFile.cs"));
 
             Console.ReadLine();
         }

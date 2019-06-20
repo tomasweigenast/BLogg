@@ -163,7 +163,7 @@ namespace BLogg.Core.Logging
         /// Logs a message with the log level Warning
         /// </summary>
         /// <param name="message">The message to log</param>
-        public void LogWaraning(string message) => Log(message, LogLevel.Warning);
+        public void LogWarning(string message) => Log(message, LogLevel.Warning);
 
         /// <summary>
         /// Logs a message with the log level Warning
