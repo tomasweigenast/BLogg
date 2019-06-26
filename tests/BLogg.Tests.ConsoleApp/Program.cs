@@ -1,6 +1,7 @@
 ﻿using BLogg.Core;
 using BLogg.Core.Events;
 using BLogg.Core.Processing.BuiltIn;
+using BLogg.Core.Processing.BuiltIn.File;
 using System;
 using System.IO;
 
@@ -15,6 +16,12 @@ namespace BLogg.Tests.ConsoleApp
                 {
                     //settings.Level = LogLevel.Debug;
                     settings.UseColors = true;
+                })
+                .WithProcessor.File(settings =>
+                {
+                    settings.Path = Directory.CreateDirectory($"{Directory.GetCurrentDirectory()}\\logs").FullName;
+                    settings.ChangePeriod = FileChangePeriod.PerMonth;
+                    settings.LogLevels = LogLevel.Error | LogLevel.Fatal;
                 })
                 .WithDefaultLogLevel(LogLevel.Debug)
                 .Build();

@@ -1,10 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace BLogg.Core.Events
 {
     /// <summary>
     /// All the possible levels of an event
     /// </summary>
+    [Flags]
     public enum LogLevel
     {
         /// <summary>

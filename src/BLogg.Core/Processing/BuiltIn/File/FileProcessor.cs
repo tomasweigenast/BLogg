@@ -1,9 +1,11 @@
 ﻿using BLogg.Core.Attributes;
 using BLogg.Core.Events;
+using BLogg.Core.Formatters;
 using BLogg.Core.Logging.Configuration;
 using System;
+using System.IO;
 
-namespace BLogg.Core.Processing.BuiltIn
+namespace BLogg.Core.Processing.BuiltIn.File
 {
     /// <summary>
     /// Processor that handles log events and writes them to files
@@ -32,16 +34,27 @@ namespace BLogg.Core.Processing.BuiltIn
 
         public void OnAdd()
         {
+            // Check if folder exists
+            if (!new DirectoryInfo(Configuration.Path).Attributes.HasFlag(FileAttributes.Directory))
+                throw new ArgumentException($"The path '{Configuration.Path}' is not a valid directory.");
+
+            // Create dir if not exists
+            Directory.CreateDirectory(Configuration.Path);
+            LogFileManager.LoadLogFiles(Configuration.Path, Configuration.FileSizeLimit <= 0 ? true : false);
         }
 
-        public void OnRevoke()
-        {
-            
-        }
+        public void OnRevoke() { }
 
         public void Process(LogEvent logEvent)
         {
-            throw new System.NotImplementedException();
+            // If the log level is not enabled, return
+            if (!Configuration.LogLevels.HasFlag(logEvent.Level))
+                return;
+
+            // Get a log and write
+            using(var logFileWriter = LogFileManager.GetLogFile(Configuration.FileSizeLimit <= 0 ? $"Period:{Configuration.ChangePeriod}" : $"SizeLimit:{Configuration.FileSizeLimit}"))
+                logFileWriter.WriteLine(new DefaultLogFormatter(false).Format(logEvent));
+
         }
 
         #endregion
@@ -57,6 +70,22 @@ namespace BLogg.Core.Processing.BuiltIn
         /// </summary>
         [RequiredProperty]
         public string Path { get; set; }
+
+        /// <summary>
+        /// Indicates the log levels that will be logged to the file.
+        /// By default, it will log <see cref="LogLevel.Debug"/> and <see cref="LogLevel.Info"/> levels.
+        /// </summary>
+        public LogLevel LogLevels { get; set; } = LogLevel.Debug | LogLevel.Info;
+
+        /// <summary>
+        /// The limit of the file size until create new file
+        /// </summary>
+        public long FileSizeLimit { get; set; } = -1;
+
+        /// <summary>
+        /// The period to roll the log file and create a new one
+        /// </summary>
+        public FileChangePeriod ChangePeriod { get; set; } = FileChangePeriod.PerWeek;
     }
 
     /// <summary>

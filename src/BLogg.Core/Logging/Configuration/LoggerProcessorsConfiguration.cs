@@ -91,6 +91,9 @@ namespace BLogg.Core.Logging.Configuration
             // Add processor
             mAddedProcessors.Add(processorInstance);
 
+            // Execute on add
+            processorInstance.OnAdd();
+
             return true;
         }
 
