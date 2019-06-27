@@ -42,6 +42,15 @@ namespace BLogg.Core.Logging
 
         #endregion
 
+        #region Static Properties
+
+        /// <summary>
+        /// A global instance of a logger
+        /// </summary>
+        public static Logger Glob { get; set; }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -111,6 +120,13 @@ namespace BLogg.Core.Logging
         /// </summary>
         /// <param name="message">The message to log</param>
         public void LogDebug(string message) => Log(message, LogLevel.Debug);
+
+        /// <summary>
+        /// Logs a message with the log level Debug
+        /// </summary>
+        /// <param name="message">The message to log</param>
+        /// <param name="exception">An exception to log</param>
+        public void LogDebug(string message, Exception exception) => Log(message, LogLevel.Debug, exception);
 
         /// <summary>
         /// Logs a message with the log level Debug

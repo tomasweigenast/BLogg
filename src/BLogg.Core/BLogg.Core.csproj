@@ -2,6 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Tomas Wegenast</Authors>
+    <Product>BLogg</Product>
+    <Description>Cross-platform library to make logging easier</Description>
+    <Copyright>Copyright Tomas Wegenast © 2019</Copyright>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Tomi-15/BLogg</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Tomi-15/BLogg</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageTags>logging logger log cross-platform library</PackageTags>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>..\..\releases\core\netstandard2.0\BLogg.Core.xml</DocumentationFile>
+    <OutputPath>..\..\releases\core\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

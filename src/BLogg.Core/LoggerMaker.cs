@@ -68,9 +68,13 @@ namespace BLogg.Core
         /// <summary>
         /// Builds a logger with the custom settings
         /// </summary>
-        public Logger Build()
+        /// <param name="addToGlobal">Indicates if the logger to create is going to be added to the Global instance</param>
+        public Logger Build(bool addToGlobal = true)
         {
             Logger logger = new Logger(WithProcessor.GetProcessors(), mDefaultLogLevel);
+
+            if (addToGlobal)
+                Logger.Glob = logger;
 
             return logger;
         }

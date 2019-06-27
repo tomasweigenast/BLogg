@@ -28,7 +28,8 @@ namespace BLogg.Tests.ConsoleApp
 
             var my = new MyClass();
 
-            logger.Log("Hello");
+            logger.Log("", LogLevel.Fatal);
+            logger.LogDebug("");
             logger.LogInformation("An information message with a property formatted: {!MyClass}", my);
             logger.LogWarning("WARNING!");
             logger.LogError("An simple error.");
