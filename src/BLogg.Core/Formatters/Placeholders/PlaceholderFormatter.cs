@@ -31,7 +31,7 @@ namespace BLogg.Core.Formatters.Placeholders
             {
                 string matchValue = "";
                 string[] matchParameters = match.Split(':');
-                Placeholder placeholder = default;
+                Placeholder placeholder = null;
 
                 // If the match contains any parameter
                 if(match.Contains(":"))

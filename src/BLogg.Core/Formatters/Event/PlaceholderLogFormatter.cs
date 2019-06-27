@@ -3,6 +3,9 @@ using BLogg.Core.Formatters.Placeholders;
 
 namespace BLogg.Core.Formatters.Event
 {
+    /// <summary>
+    /// Applies format to the an event using the placeholder formatter
+    /// </summary>
     public class PlaceholderLogFormatter : IEventFormatter
     {
         #region Private Members
