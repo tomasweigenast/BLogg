@@ -3,7 +3,7 @@ BLogg provides you a fast and easy way to log events in your applications.
 
 > It's cross-platform so you can use it in Xamarin, MVC, .NET Core, Mono and .NET Framework projects
 
-[![Build Status](https://img.shields.io/travis/Tomi-15/BLogg.svg?style=for-the-badge)](https://travis-ci.com/Tomi-15/cfgConfig)
+[![Build Status](https://img.shields.io/travis/com/Tomi-15/BLogg.svg?style=for-the-badge)](https://travis-ci.com/Tomi-15/BLogg)
 [![License](https://img.shields.io/badge/license-GNU%20GPLv3-blue.svg?style=for-the-badge)](https://github.com/Tomi-15/BLogg/blob/master/LICENSE.txt)
 [![OpenIssues](https://img.shields.io/github/issues-raw/Tomi-15/BLogg.svg?style=for-the-badge)](https://github.com/Tomi-15/BLogg/issues)
 ![Discord](https://img.shields.io/badge/Discord-Tomas%238453-orange.svg?style=for-the-badge&logo=discord)
